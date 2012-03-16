@@ -1,0 +1,155 @@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>@title</title>
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+<script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+
+<link rel="stylesheet"
+	href="http://blueimp.github.com/cdn/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="http://blueimp.github.com/cdn/css/bootstrap-responsive.min.css">
+<!--[if lt IE 7]><link rel="stylesheet" href="http://blueimp.github.com/cdn/css/bootstrap-ie6.min.css"><![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap-image-gallery.min.css")">
+
+<style>
+body {
+	padding-top: 60px;
+	background: #222;
+	color: #fff;
+}
+
+header {
+	margin-bottom: 30px;
+}
+
+header h1 {
+	font-family: 'Lucida Grande', 'Lucida Sans Unicode', Arial, sans-serif;
+	color: #fff;
+	margin-bottom: 10px;
+}
+
+header a {
+	color: orange;
+}
+
+</style>
+
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> </a> <a
+					class="brand" href="#">Twitter Photo Live</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li><a href="http://www.twitter.com/FabienAMICO">FabienAMICO</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<header>
+			<blockquote>
+				<p>Tweet photo with one of this hastag #Paris, #Marseille, #London, #Berlin, #Sydney, #NY, #Madrid, #Barcelona, #Tokyo</p>
+			</blockquote>
+			<p>
+				<button id="toggle-fullscreen" class="btn btn-large btn-primary"
+					data-toggle="button">Toggle Fullscreen</button>
+			</p>
+		</header>
+		
+			@content
+
+	</div>
+
+<!-- modal-gallery is the modal dialog used for the image gallery -->
+<div id="modal-gallery" class="modal modal-gallery hide fade">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h3 class="modal-title"></h3>
+    </div>
+    <div class="modal-body"><div class="modal-image"></div></div>
+    <div class="modal-footer">
+        <a class="btn btn-primary modal-next">
+            <span>Next</span>
+            <i class="icon-arrow-right icon-white"></i>
+        </a>
+        <a class="btn btn-info modal-prev">
+            <i class="icon-arrow-left icon-white"></i>
+            <span>Previous</span>
+        </a>
+        <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000">
+            <i class="icon-play icon-white"></i>
+            <span>Slideshow</span>
+        </a>
+        <a class="btn modal-download" target="_blank">
+            <i class="icon-download"></i>
+            <span>Download</span>
+        </a>
+    </div>
+</div>
+
+
+	<script src="http://blueimp.github.com/cdn/js/bootstrap.min.js"></script>
+	<script
+		src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
+	<script src="@routes.Assets.at("javascripts//bootstrap-image-gallery.min.js")" type="text/javascript"></script>
+	<script>
+/*jslint unparam: true */
+/*global window, document, $ */
+$(function () {
+    'use strict';
+
+    // Start slideshow button:
+    $('#start-slideshow').button().click(function () {
+        var options = $(this).data(),
+            modal = $(options.target),
+            data = modal.data('modal');
+        if (data) {
+            $.extend(data.options, options);
+        } else {
+            options = $.extend(modal.data(), options);
+        }
+        modal.find('.modal-slideshow').find('i')
+            .removeClass('icon-play')
+            .addClass('icon-pause');
+        modal.modal(options);
+    });
+
+    // Toggle fullscreen button:
+    $('#toggle-fullscreen').button().click(function () {
+        var button = $(this),
+            root = document.documentElement;
+        if (!button.hasClass('active')) {
+            $('#modal-gallery').addClass('modal-fullscreen');
+            if (root.webkitRequestFullScreen) {
+                root.webkitRequestFullScreen(
+                    window.Element.ALLOW_KEYBOARD_INPUT
+                );
+            } else if (root.mozRequestFullScreen) {
+                root.mozRequestFullScreen();
+            }
+        } else {
+            $('#modal-gallery').removeClass('modal-fullscreen');
+            (document.webkitCancelFullScreen ||
+                document.mozCancelFullScreen ||
+                $.noop).apply(document);
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+@(message: String)
+
+@main("Twitter photo live") {
+    
+    
+    <div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery"></div>
+    <br>
+    
+    
+     <script type="text/javascript" charset="utf-8">
+    
+        $(function() {
+            var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
+	        var chatSocket = new WS("@routes.Application.addPhoto().webSocketURL(request)")
+            
+            var receivePhoto = function(event) {
+                var data = JSON.parse(event.data)
+                console.log('message ', data)
+                // Create the message element
+                var el = $('<a rel="gallery"/>').append($('<img class="scale" height="80px" width="80px">').prop('src', data.image))
+                .prop('href', data.image)
+                .prop('title', data.user)
+                
+                $('#gallery').prepend(el)
+                        
+            }
+            
+            chatSocket.onmessage = receivePhoto
+            
+        })
+    
+    </script>
+    
+    
+}
